@@ -1,10 +1,12 @@
 import CredentialProviders from 'next-auth/providers/credentials'
 export const AuthOption = {
+    pages: {
+        signIn: '/login',
+    },
     providers: [
         CredentialProviders({
             name: 'credential',
             credentials: {
-                name: { label: 'Name', type: 'text'},
                 email: { label: 'Email', type: 'text'},
                 password: { label: 'Password', type: 'password'}
             },
@@ -13,13 +15,12 @@ export const AuthOption = {
                     return null;
                 }
 
-                const response = await fetch('http://localhost:3001/api/user/createUser', {
+                const response = await fetch('http://localhost:3001/api/user/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        name: credentials.name,
                         email: credentials.email,
                         password: credentials.password
                     })
