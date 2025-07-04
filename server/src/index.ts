@@ -1,8 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { PORT } from './config';
 import routes from './routes';
 import cors from 'cors';
 import twitterRoutes from './routes/twitter.route';
+import { errorHandler } from './middleware/errorHandler';
 const app = express();
 
 
