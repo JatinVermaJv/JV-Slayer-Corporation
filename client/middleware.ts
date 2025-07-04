@@ -1,19 +1,26 @@
+import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-    const token = request.cookies.get('next-auth.session-token') || request.cookies.get('__Secure-next-auth.session-token');
-    console.log("Middleware Token:", token);
-    // If token is not found, redirect to login
-    if (!token) {
-        return NextResponse.redirect(new URL('/login', request.url));
+export default withAuth(
+  function middleware(req) {
+    const token = req.nextauth.token;
+    const isTwitterRoute = req.nextUrl.pathname.startsWith('/twitter');
+    
+    // For Twitter routes, just check if user is logged in
+    // The actual Twitter token check happens in the API calls
+    if (isTwitterRoute && !token) {
+      return NextResponse.redirect(new URL('/login', req.url));
     }
-
+    
     return NextResponse.next();
-}
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token,
+    },
+  }
+);
 
 export const config = {
-    matcher: ['/dashboard/:path*'],
-
-    
+  matcher: ['/dashboard/:path*', '/twitter/:path*'],
 };

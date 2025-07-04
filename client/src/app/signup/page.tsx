@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function SignupPage() {
@@ -20,7 +21,7 @@ export default function SignupPage() {
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
   };
 
   const itemVariants = {
@@ -91,6 +92,11 @@ export default function SignupPage() {
             Sign Up
           </motion.button>
         </form>
+        <button onClick={() => signIn('twitter', { callbackUrl: '/twitter' })}
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 items-center gap-2 mt-4">
+
+        Sign in with Twitter
+      </button>
         <motion.p className="mt-6 text-center text-gray-400" variants={itemVariants}>
           Already have an account?{" "}
           <Link href="/login" className="font-medium text-purple-400 hover:text-purple-300">

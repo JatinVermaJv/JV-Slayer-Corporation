@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
   };
 
   const itemVariants = {
@@ -101,7 +101,7 @@ export default function LoginPage() {
           </motion.button>
         </form>
         <motion.p className="mt-6 text-center text-gray-400" variants={itemVariants}>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/signup" className="font-medium text-blue-400 hover:text-blue-300">
             Sign Up
           </Link>

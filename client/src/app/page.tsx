@@ -18,7 +18,7 @@ export default function Home() {
     visible: { 
       y: 0, 
       opacity: 1, 
-      transition: { type: 'spring', stiffness: 100 }
+      transition: { type: "spring" as const, stiffness: 100 }
     },
   };
 
@@ -41,7 +41,7 @@ export default function Home() {
         <motion.div 
           className="mb-8" 
           variants={itemVariants}
-          animate={{ y: [0, -10, 0], transition: { yoyo: Infinity, duration: 2 } }}
+          animate={{ y: [0, -10, 0], transition: { repeat: Infinity, repeatType: "loop", duration: 2 } }}
         >
           <Twitter className="w-24 h-24 text-blue-400" />
         </motion.div>
