@@ -1,24 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { UserPlus } from "lucide-react";
+import { Twitter } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function SignupPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Add your signup logic here
-    // For example, call an API route to create a new user
-    console.log({ email, password });
-    router.push("/login");
-  };
-
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
@@ -42,67 +28,47 @@ export default function SignupPage() {
         initial="hidden"
         animate="visible"
       >
+        <motion.div 
+          className="flex justify-center mb-6"
+          variants={itemVariants}
+        >
+          <Twitter className="w-16 h-16 text-purple-400" />
+        </motion.div>
         <motion.h1
-          className="text-3xl font-bold text-center mb-8 text-purple-400"
+          className="text-3xl font-bold text-center mb-4 text-purple-400"
           variants={itemVariants}
         >
           Sign Up for JV-Slayer
         </motion.h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div variants={itemVariants}>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-300 mb-1"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm text-white"
-              required
-            />
-          </motion.div>
-          <motion.div variants={itemVariants}>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-1"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm text-white"
-              required
-            />
-          </motion.div>
-          <motion.button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200 items-center gap-2"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <UserPlus className="w-5 h-5" />
-            Sign Up
-          </motion.button>
-        </form>
-        <button onClick={() => signIn('twitter', { callbackUrl: '/twitter' })}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 items-center gap-2 mt-4">
-
-        Sign in with Twitter
-      </button>
-        <motion.p className="mt-6 text-center text-gray-400" variants={itemVariants}>
-          Already have an account?{" "}
-          <Link href="/login" className="font-medium text-purple-400 hover:text-purple-300">
-            Login
+        <motion.button
+          onClick={() => signIn("twitter", { callbackUrl: "/twitter" })}
+          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200 items-center gap-3"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <Twitter className="w-5 h-5" />
+          Get Started with Twitter
+        </motion.button>
+        <motion.div 
+          className="mt-8 text-center text-sm text-gray-400"
+          variants={itemVariants}
+        >
+          <p>
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium text-purple-400 hover:text-purple-300">
+              Login
+            </Link>
+          </p>
+        </motion.div>
+        <motion.div 
+          className="mt-4 text-center"
+          variants={itemVariants}
+        >
+          <Link href="/" className="text-purple-400 hover:text-purple-300 text-sm">
+            ← Back to Home
           </Link>
-        </motion.p>
+        </motion.div>
       </motion.div>
     </div>
   );

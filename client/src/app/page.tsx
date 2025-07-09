@@ -3,8 +3,20 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Twitter, LogIn } from 'lucide-react';
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const { status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.replace('/twitter');
+    }
+  }, [status, router]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -60,8 +72,8 @@ export default function Home() {
           Automate your Twitter presence with ease. Schedule tweets, analyze performance, and grow your audience effortlessly.
         </motion.p>
 
-        <motion.div variants={itemVariants}>
-          <Link href="/login" passHref>
+        <motion.div className="flex flex-row gap-4 justify-center" variants={itemVariants}>
+          <Link href="/signup" passHref>
             <motion.button 
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full flex items-center gap-2 transition-colors duration-300 shadow-lg shadow-blue-500/20"
               variants={buttonVariants}
@@ -70,6 +82,17 @@ export default function Home() {
             >
               <LogIn className="w-5 h-5" />
               Get Started
+            </motion.button>
+          </Link>
+          <Link href="/login" passHref>
+            <motion.button 
+              className="bg-transparent border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-3 px-8 rounded-full flex items-center gap-2 transition-colors duration-300"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              <LogIn className="w-5 h-5" />
+              Sign In
             </motion.button>
           </Link>
         </motion.div>

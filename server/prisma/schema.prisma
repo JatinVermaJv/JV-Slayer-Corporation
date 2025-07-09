@@ -18,7 +18,33 @@ model user{
   id          Int        @id @default(autoincrement())
   name        String
   email       String     @unique
-  password    String 
+  password    String?    // Optional for Twitter users
   createdAt   DateTime   @default(now())
-  
+  // Twitter provider fields
+  twitterId   String?    @unique
+  twitterUsername String?
+  twitterAccessToken String?
+  twitterRefreshToken String?
+  lastLogin   DateTime?
+  tweets      Tweet[]
+}
+
+model Tweet {
+  id            Int      @id @default(autoincrement())
+  user          user     @relation(fields: [userId], references: [id])
+  userId        Int
+  content       String
+  scheduledFor  DateTime?
+  postedAt      DateTime?
+  twitterPostId String?  // Twitter's tweet ID if posted
+  status        TweetStatus @default(SCHEDULED)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum TweetStatus {
+  SCHEDULED
+  POSTED
+  FAILED
+  CANCELLED
 }

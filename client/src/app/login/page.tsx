@@ -1,35 +1,28 @@
 "use client";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { LogIn } from "lucide-react";
+import { Twitter } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { status } = useSession();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (result?.ok) {
-      router.push("/dashboard");
-    } else {
-      // Handle error
-      console.error(result?.error);
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/twitter");
     }
-  };
+  }, [status, router]);
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 100 },
+    },
   };
 
   const itemVariants = {
@@ -50,62 +43,53 @@ export default function LoginPage() {
         initial="hidden"
         animate="visible"
       >
+        <motion.div
+          className="flex justify-center mb-6"
+          variants={itemVariants}
+        >
+          <Twitter className="w-16 h-16 text-blue-400" />
+        </motion.div>
         <motion.h1
-          className="text-3xl font-bold text-center mb-8 text-blue-400"
+          className="text-3xl font-bold text-center mb-4 text-blue-400"
           variants={itemVariants}
         >
           Login to JV-Slayer
         </motion.h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div variants={itemVariants}>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-300 mb-1"
+        <motion.button
+          onClick={() => signIn("twitter", { callbackUrl: "/twitter" })}
+          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 items-center gap-3"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+        >
+          <Twitter className="w-5 h-5" />
+          Continue with Twitter
+        </motion.button>
+        <motion.div
+          className="mt-8 text-center text-sm text-gray-400"
+          variants={itemVariants}
+        >
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-blue-400 hover:text-blue-300"
             >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-white"
-              required
-            />
-          </motion.div>
-          <motion.div variants={itemVariants}>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-1"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-white"
-              required
-            />
-          </motion.div>
-          <motion.button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 items-center gap-2"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
+              Sign Up
+            </Link>
+          </p>
+        </motion.div>
+        <motion.div
+          className="mt-4 text-center"
+          variants={itemVariants}
+        >
+          <Link
+            href="/"
+            className="text-blue-400 hover:text-blue-300 text-sm"
           >
-            <LogIn className="w-5 h-5" />
-            Sign In
-          </motion.button>
-        </form>
-        <motion.p className="mt-6 text-center text-gray-400" variants={itemVariants}>
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="font-medium text-blue-400 hover:text-blue-300">
-            Sign Up
+            ← Back to Home
           </Link>
-        </motion.p>
+        </motion.div>
       </motion.div>
     </div>
   );
